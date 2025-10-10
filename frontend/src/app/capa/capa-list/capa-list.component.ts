@@ -15,22 +15,23 @@ export class CapaListComponent {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.map = L.map('map').setView([0, 0], 2);
+    this.map = L.map('map').setView([40.78, -74], 10.5);
     var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors'
     });
     osm.addTo(this.map);
 
-    const url = "http://localhost:8080/geoserver/topp/ows?service=WMS&request=GetCapabilities";
+    //const url = "http://localhost:8080/geoserver/topp/ows?service=WMS&request=GetCapabilities";
+    const url = "http://localhost:8080/geoserver/wms"
 
     // Consultar capas desde el backend Django
     this.http.get<any[]>('http://localhost:8000/api/capa')
       .subscribe(capas => {
         capas.forEach(capa => {
           // Añadir la capa WMS desde GeoServer
-          L.tileLayer.wms(capa.geoserver_url, {
-            layers: '', // ya viene en la URL
+          L.tileLayer.wms(url, {
+            layers: 'tiger:poly_landmarks', // ya viene en la URL
             format: 'image/png',
             transparent: true
           }).addTo(this.map);
