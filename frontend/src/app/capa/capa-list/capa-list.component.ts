@@ -22,16 +22,13 @@ export class CapaListComponent {
     });
     osm.addTo(this.map);
 
-    //const url = "http://localhost:8080/geoserver/topp/ows?service=WMS&request=GetCapabilities";
-    const url = "http://localhost:8080/geoserver/wms"
-
     // Consultar capas desde el backend Django
     this.http.get<any[]>('http://localhost:8000/api/capa')
       .subscribe(capas => {
         capas.forEach(capa => {
           // Añadir la capa WMS desde GeoServer
-          L.tileLayer.wms(url, {
-            layers: 'tiger:poly_landmarks', // ya viene en la URL
+          L.tileLayer.wms(capa.geoserver_url, {
+            layers: capa.geoserver_nombre,
             format: 'image/png',
             transparent: true
           }).addTo(this.map);
