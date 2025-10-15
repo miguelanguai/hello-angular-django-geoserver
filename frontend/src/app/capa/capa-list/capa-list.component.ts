@@ -30,7 +30,8 @@ export class CapaListComponent {
           L.tileLayer.wms(capa.geoserver_url, {
             layers: capa.geoserver_nombre,
             format: 'image/png',
-            transparent: true
+            transparent: true,
+            opacity: 0.5
           }).addTo(this.map);
         });
         this.capas = capas;
